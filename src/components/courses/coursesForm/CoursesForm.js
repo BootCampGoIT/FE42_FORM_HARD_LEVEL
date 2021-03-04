@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { form } from "./CoursesForm.module.css";
 
 const initialState = {
   name: "",
@@ -13,7 +14,18 @@ class CoursesForm extends Component {
   state = {
     ...initialState,
     ...this.props.course,
+    flag: [],
+    canceled: false,
   };
+
+  componentDidMount() {
+    console.log("mount");
+  }
+
+  componentWillUnmount() {
+    this.setState({ canceled: true });
+    console.log("unMount");
+  }
 
   onHandleChange = (e) => {
     const { name, value } = e.target;
@@ -26,14 +38,13 @@ class CoursesForm extends Component {
       this.props.editCourse(this.state);
     } else {
       this.props.addCourse(this.state);
-      this.setState({ ...initialState });
     }
   };
 
   render() {
     const { name, modulesCount, time, difficulty } = this.state;
     return (
-      <form onSubmit={this.onHandleSubmit}>
+      <form onSubmit={this.onHandleSubmit} className={form}>
         <label>
           Name:
           <input
@@ -73,6 +84,18 @@ class CoursesForm extends Component {
         </select>
 
         <button type='submit'>{!this.state.id ? "Add Course" : "Save"}</button>
+        <button
+          type='button'
+          onClick={() =>
+            fetch("https://jsonplaceholder.typicode.com/todos")
+              .then((response) => response.json())
+              .then(
+                (data) =>
+                  this.state.canceled && this.setState({ flag: [...data] })
+              )
+          }>
+          GET Data
+        </button>
       </form>
     );
   }
