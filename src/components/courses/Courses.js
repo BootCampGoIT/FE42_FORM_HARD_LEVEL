@@ -60,14 +60,15 @@ class Courses extends Component {
   };
 
   editCourse = (course) => {
+    const id = course.id;
     this.setLoading();
     editCourseById(course)
       .then(() =>
         this.setState((prev) => ({
           coursesList: [
-            ...prev.coursesList.map((item) =>
-              item.id === course.id ? course : item
-            ),
+            ...prev.coursesList.map((item) => {
+              return item.id === id ? {id, ...course} : item;
+            }),
           ],
           editedCourse: "",
         }))
@@ -118,14 +119,14 @@ export default Courses;
 //   getResult() {},
 // };
 
-var a = 1;
+// var a = 1;
 
-function b() {
-  a = 10;
-  return;
-  function a() {}
-}
+// function b() {
+//   a = 10;
+//   return;
+//   function a() {}
+// }
 
-b();
+// b();
 
-console.log(a);
+// console.log(a);
